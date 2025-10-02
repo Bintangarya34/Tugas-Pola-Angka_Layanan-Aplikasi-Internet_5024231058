@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tugas Pola JavaScript</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #111;
+            color: #FFD700;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .moving-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: auto;
+            opacity: 0.08;
+            z-index: 1;
+            pointer-events: none;
+            transform-origin: center center;
+            animation: 
+                floatAndRotate 15s infinite ease-in-out alternate,
+                pulseOpacity 5s infinite alternate;
+        }
+
+        @keyframes floatAndRotate {
+            0% { 
+                transform: translate(-50%, -50%) rotateY(0deg) rotateX(0deg); 
+            }
+            25% { 
+                transform: translate(-60%, -40%) rotateY(90deg) rotateX(30deg) scale(1.1); 
+            }
+            50% { 
+                transform: translate(-40%, -60%) rotateY(180deg) rotateX(0deg); 
+            }
+            75% { 
+                transform: translate(-70%, -30%) rotateY(270deg) rotateX(-30deg) scale(0.9); 
+            }
+            100% { 
+                transform: translate(-50%, -50%) rotateY(360deg) rotateX(0deg); 
+            }
+        }
+
+        @keyframes pulseOpacity {
+            0% { opacity: 0.06; }
+            50% { opacity: 0.12; }
+            100% { opacity: 0.06; }
+        }
+
+        .main-content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .pattern-container {
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            color: #FFD700;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        h2 {
+            color: #FFF2A4;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #d4d4d4;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            white-space: pre;
+            font-size: 14px;
+        }
+        
+        .zombie-infected {
+            color: #FFD700;
+        }
+        
+        @media (max-width: 600px) {
+            .pattern-container {
+                width: 95%;
+            }
+            pre {
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="https://avatars.githubusercontent.com/u/70087635?s=200&v=4" alt="GitHub Logo" class="moving-logo">
+
+    <div class="main-content-wrapper">
+        <div class="content">
+            <h1>Tugas Pola JavaScript</h1>
+            <p>Pola 1,2 statis, sementara Pola 3 saya membuat Pola "infeksi".</p>
+            
+            <div class="pattern-container">
+                <h2>Tugas 1: Segitiga Angka</h2>
+                <pre id="output1"></pre>
+            </div>
+            
+            <div class="pattern-container">
+                <h2>Tugas 2: Segitiga Pascal</h2>
+                <pre id="output2"></pre>
+            </div>
+            
+            <div class= "pattern-container">
+                <h2>Tugas 3: Infeksi Matriks Arek Tekkom</h2>
+                <pre id="output3"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Tugas 1: Segitiga Angka (Statis) ---
+        function tugas1_segitigaAngka() {
+            let output = "";
+            for (let i = 0; i <= 8; i++) {
+                let row = '';
+                for (let j = 0; j < 8 - i; j++) {
+                    row += '  ';
+                }
+                for (let k = 0; k <= i; k++) {
+                    row += k + ' ';
+                }
+                for (let l = i - 1; l >= 0; l--) {
+                    row += l + ' ';
+                }
+                output += row + '\n';
+            }
+            return output;
+        }
+
+        // --- Tugas 2: Segitiga Pascal (Statis) ---
+        function tugas2_segitigaPascal() {
+            const rows = 15;
+            let output = "";
+            let triangle = [];
+            for (let i = 0; i < rows; i++) {
+                triangle[i] = [];
+                triangle[i][0] = 1;
+                for (let j = 1; j < i; j++) {
+                    triangle[i][j] = triangle[i - 1][j - 1] + triangle[i - 1][j];
+                }
+                if (i > 0) {
+                    triangle[i][i] = 1;
+                }
+            }
+            for (let i = 0; i < triangle.length; i++) {
+                let rowString = '';
+                for (let j = 0; j < triangle.length - i - 1; j++) {
+                    rowString += '  ';
+                }
+                for (let k = 0; k < triangle[i].length; k++) {
+                    rowString += triangle[i][k] + '   ';
+                }
+                output += rowString + '\n';
+            }
+            return output;
+        }
+        
+        // --- Tugas 3: Efek Infeksi Matriks ---
+        const ZOMBIE_SYMBOLS = ['🧟', '☠️', '☣️', '🤖'];
+        const MATRIX_WIDTH = 20;
+        const MATRIX_HEIGHT = 10;
+        let originalMatrix = [];
+        let infectedCells = 0;
+
+        function generateOriginalMatrix() {
+            originalMatrix = [];
+            for (let i = 0; i < MATRIX_HEIGHT; i++) {
+                let row = [];
+                for (let j = 0; j < MATRIX_WIDTH; j++) {
+                    row.push(Math.floor(Math.random() * 10)); // Angka acak 0-9
+                }
+                originalMatrix.push(row);
+            }
+            infectedCells = 0;
+        }
+
+        function tugas3_efekInfeksi() {
+            let output = "";
+            let tempMatrix = originalMatrix.map(row => [...row]); // Duplikat matriks
+
+            // Infeksi sel acak
+            for (let i = 0; i < infectedCells; i++) {
+                const randomRow = Math.floor(Math.random() * MATRIX_HEIGHT);
+                const randomCol = Math.floor(Math.random() * MATRIX_WIDTH);
+                
+                tempMatrix[randomRow][randomCol] = ZOMBIE_SYMBOLS[Math.floor(Math.random() * ZOMBIE_SYMBOLS.length)];
+            }
+
+            // Membangun string output
+            for (let i = 0; i < MATRIX_HEIGHT; i++) {
+                let rowString = "";
+                for (let j = 0; j < MATRIX_WIDTH; j++) {
+                    const cell = tempMatrix[i][j];
+                    if (typeof cell === 'string') {
+                        rowString += `<span class="zombie-infected">${cell}</span>`;
+                    } else {
+                        rowString += cell;
+                    }
+                    rowString += " ";
+                }
+                output += rowString + "\n";
+            }
+            return output;
+        }
+        
+        function updateInfection() {
+            document.getElementById('output3').innerHTML = tugas3_efekInfeksi();
+            
+            infectedCells += 10; // Setiap detik 2 sel terinfeksi
+            if (infectedCells > MATRIX_WIDTH * MATRIX_HEIGHT) {
+                infectedCells = 0;
+                generateOriginalMatrix();
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('output1').textContent = tugas1_segitigaAngka();
+            document.getElementById('output2').textContent = tugas2_segitigaPascal();
+            
+            generateOriginalMatrix();
+            setInterval(updateInfection, 500); // Perbarui setiap 0.5 detik
+        };
+    </script>
+</body>
+</html>
